@@ -1,0 +1,11 @@
+{
+  "extends": "@tsconfig/strictest",
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "sourceMap": true,
+    "target": "ESNext"
+  }
+}
