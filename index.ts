@@ -64,14 +64,19 @@ export function createKeyMapping<T>(keyMapping: KeyMapping<T>): KeyMappingNode<T
  * getKeyMapping(["A", "B"], root)?.mapping?.action?.(); // => Hello!
  * ```
  */
-export function addKeyMappings<T>(keyMappings: KeyMapping<T>[], root: KeyMappingNode<T>): KeyMappingNode<T> {
-  let keyMappingNode: KeyMappingNode<T> = root.add(keyMappings[0]);
+export function addKeyMappings<T>(keyMappings: KeyMapping<T>[], root: KeyMappingNode<T>): void {
+  // TODO: !
+  let keyMappingNode: KeyMappingNode<T> = root.add(keyMappings[0]!);
 
   for (let i = 1, len = keyMappings.length; i < len; i += 1) {
-    keyMappingNode = keyMappingNode.add(keyMappings[i]);
-  }
+    const keyMapping = keyMappings[i];
 
-  return keyMappingNode;
+    if (!keyMapping) {
+      return;
+    }
+
+    keyMappingNode = keyMappingNode.add(keyMapping);
+  }
 }
 
 /**
@@ -90,14 +95,16 @@ export function addKeyMappings<T>(keyMappings: KeyMapping<T>[], root: KeyMapping
  * ```
  */
 export function getKeyMapping<T>(keys: T[], root: KeyMappingNode<T>): KeyMappingNode<T> | undefined {
-  let keyMapping: KeyMappingNode<T> | undefined = root.get(keys[0]);
+  // TODO: !
+  let keyMapping: KeyMappingNode<T> | undefined = root.get(keys[0]!);
 
   for (let i = 1, len = keys.length; i < len; i += 1) {
     if (!keyMapping) {
       break;
     }
 
-    keyMapping = keyMapping.get(keys[i]);
+    // TODO: !
+    keyMapping = keyMapping.get(keys[i]!);
   }
 
   return keyMapping;
