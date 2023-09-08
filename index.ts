@@ -1,12 +1,13 @@
 export type KeyMapping<T> = {
   key: T;
-  action?: () => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  action?: (...args: any[]) => any;
 };
 
 export type KeyMappingNode<T> = {
   add: (nextKeyMapping: KeyMapping<T>) => KeyMappingNode<T>;
   get: (key: T) => KeyMappingNode<T> | undefined;
-  // TODO: remove
+  // TODO: remove: () => void;
   mapping: KeyMapping<T>;
 };
 
@@ -17,7 +18,7 @@ export type KeyMappingNode<T> = {
  * @returns key mapping node
  * @example
  * ```ts
- * const root = createKeyMapping({ key: "" });
+ * const root = createKeyMappingNode({ key: "" });
  *
  * root
  *   .add({ key: "A" })
@@ -26,14 +27,14 @@ export type KeyMappingNode<T> = {
  * root.get("A")?.get("B")?.mapping?.action?.(); // => Hello!
  * ```
  */
-export function createKeyMapping<T>(
+export function createKeyMappingNode<T>(
   keyMapping: KeyMapping<T>
 ): KeyMappingNode<T> {
   const mapping = keyMapping;
   const nextMapping = new Map<T, KeyMappingNode<T>>();
 
   const add: KeyMappingNode<T>['add'] = (nextKeyMapping) => {
-    const nextKeyMappingNode = createKeyMapping(nextKeyMapping);
+    const nextKeyMappingNode = createKeyMappingNode(nextKeyMapping);
 
     nextMapping.set(nextKeyMappingNode.mapping.key, nextKeyMappingNode);
 
@@ -60,37 +61,40 @@ export function createKeyMapping<T>(
  * @returns last key mapping node
  * @example
  * ```ts
- * const root = createKeyMapping({ key: "" });
+ * const root = createKeyMappingNode({ key: "" });
  *
  * addKeyMappings([{ key: "A" }, { key: "B", action() { console.log("Hello!"); } }], root);
- * getKeyMapping(["A", "B"], root)?.mapping?.action?.(); // => Hello!
+ * getKeyMappingNode(["A", "B"], root)?.mapping?.action?.(); // => Hello!
  * ```
  */
 export function addKeyMappings<T>(
   keyMappings: KeyMapping<T>[],
   root: KeyMappingNode<T>
 ): void {
-  const firstKeyMapping = keyMappings[0];
+  // if key mapping exist, use it
+  const get = (
+    keyMapping: KeyMapping<T>,
+    keyMappingNode: KeyMappingNode<T> = root
+  ): KeyMappingNode<T> =>
+    keyMappingNode.get(keyMapping.key) || keyMappingNode.add(keyMapping);
 
-  if (!firstKeyMapping) {
-    return;
-  }
+  let keyMappingNode: KeyMappingNode<T> | undefined = undefined;
 
-  let keyMappingNode: KeyMappingNode<T> = root.add(firstKeyMapping);
-
-  for (let i = 1, len = keyMappings.length; i < len; i += 1) {
+  for (let i = 0, len = keyMappings.length; i < len; i += 1) {
     const keyMapping = keyMappings[i];
 
     if (!keyMapping) {
       return;
     }
 
-    keyMappingNode = keyMappingNode.add(keyMapping);
+    keyMappingNode = keyMappingNode
+      ? get(keyMapping, keyMappingNode)
+      : get(keyMapping);
   }
 }
 
 /**
- * get key mapping
+ * get key mapping node
  * it is utility function
  *
  * @param keys - mapping keys
@@ -98,33 +102,33 @@ export function addKeyMappings<T>(
  * @returns key mapping node if exist, otherwise undefined
  * @example
  * ```ts
- * const root = createKeyMapping({ key: "" });
+ * const root = createKeyMappingNode({ key: "" });
  *
  * addKeyMappings([{ key: "A" }, { key: "B", action() { console.log("Hello!"); } }], root);
- * getKeyMapping(["A", "B"], root)?.mapping?.action?.(); // => Hello!
+ * getKeyMappingNode(["A", "B"], root)?.mapping?.action?.(); // => Hello!
  * ```
  */
-export function getKeyMapping<T>(
+export function getKeyMappingNode<T>(
   keys: T[],
   root: KeyMappingNode<T>
 ): KeyMappingNode<T> | undefined {
-  const firstKey = keys[0];
+  // get key mapping node
+  const get = (
+    key: T,
+    keyMappingNode: KeyMappingNode<T> = root
+  ): KeyMappingNode<T> | undefined => keyMappingNode.get(key);
 
-  if (!firstKey) {
-    return;
-  }
+  let keyMappingNode: KeyMappingNode<T> | undefined = undefined;
 
-  let keyMapping: KeyMappingNode<T> | undefined = root.get(firstKey);
-
-  for (let i = 1, len = keys.length; i < len; i += 1) {
+  for (let i = 0, len = keys.length; i < len; i += 1) {
     const key = keys[i];
 
-    if (!keyMapping || !key) {
+    if (!key) {
       break;
     }
 
-    keyMapping = keyMapping.get(key);
+    keyMappingNode = keyMappingNode ? get(key, keyMappingNode) : get(key);
   }
 
-  return keyMapping;
+  return keyMappingNode;
 }
