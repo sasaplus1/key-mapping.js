@@ -49,8 +49,10 @@
   "scripts": {
     "build": "microbundle build",
     "fix": "run-p -l fix:*",
+    "fix:eslint": "eslint --fix .",
     "fix:prettier": "prettier --write .",
     "lint": "run-p -l lint:*",
+    "lint:eslint": "eslint .",
     "lint:prettier": "prettier --check .",
     "watch": "microbundle watch"
   },
