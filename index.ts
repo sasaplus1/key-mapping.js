@@ -70,8 +70,13 @@ export function addKeyMappings<T>(
   keyMappings: KeyMapping<T>[],
   root: KeyMappingNode<T>
 ): void {
-  // TODO: !
-  let keyMappingNode: KeyMappingNode<T> = root.add(keyMappings[0]!);
+  const firstKeyMapping = keyMappings[0];
+
+  if (!firstKeyMapping) {
+    return;
+  }
+
+  let keyMappingNode: KeyMappingNode<T> = root.add(firstKeyMapping);
 
   for (let i = 1, len = keyMappings.length; i < len; i += 1) {
     const keyMapping = keyMappings[i];
@@ -103,16 +108,22 @@ export function getKeyMapping<T>(
   keys: T[],
   root: KeyMappingNode<T>
 ): KeyMappingNode<T> | undefined {
-  // TODO: !
-  let keyMapping: KeyMappingNode<T> | undefined = root.get(keys[0]!);
+  const firstKey = keys[0];
+
+  if (!firstKey) {
+    return;
+  }
+
+  let keyMapping: KeyMappingNode<T> | undefined = root.get(firstKey);
 
   for (let i = 1, len = keys.length; i < len; i += 1) {
-    if (!keyMapping) {
+    const key = keys[i];
+
+    if (!keyMapping || !key) {
       break;
     }
 
-    // TODO: !
-    keyMapping = keyMapping.get(keys[i]!);
+    keyMapping = keyMapping.get(key);
   }
 
   return keyMapping;
