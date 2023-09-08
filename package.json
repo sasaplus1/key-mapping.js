@@ -43,6 +43,10 @@
   },
   "scripts": {
     "build": "microbundle build",
+    "fix": "run-p -l fix:*",
+    "fix:prettier": "prettier --write .",
+    "lint": "run-p -l lint:*",
+    "lint:prettier": "prettier --check .",
     "watch": "microbundle watch"
   },
   "sideEffects": false,
