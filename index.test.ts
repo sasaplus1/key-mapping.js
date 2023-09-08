@@ -21,6 +21,26 @@ describe('key-mapping', function () {
     assert.deepStrictEqual(keyMapping?.mapping?.key, 'C');
     assert.deepStrictEqual(typeof keyMapping?.mapping?.action, 'function');
   });
+  it('should can remove', function () {
+    const root = createKeyMappingNode({ key: '' });
+
+    root
+      .add({ key: 'A' })
+      .add({ key: 'B' })
+      .add({ key: 'C', action() {} });
+
+    root.get('A')?.get('B')?.remove('C');
+
+    assert.deepStrictEqual(root.get('A')?.get('B')?.get('C'), undefined);
+
+    root.get('A')?.remove('B');
+
+    assert.deepStrictEqual(root.get('A')?.get('B'), undefined);
+
+    root.remove('A');
+
+    assert.deepStrictEqual(root.get('A'), undefined);
+  });
   it('should can add and get with utility functions', function () {
     const root = createKeyMappingNode({ key: '' });
 
