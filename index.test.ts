@@ -34,4 +34,31 @@ describe('key-mapping', function () {
     assert.deepStrictEqual(keyMapping?.mapping?.key, 'C');
     assert.deepStrictEqual(typeof keyMapping?.mapping?.action, 'function');
   });
+  it('should can add key mappings to node', function () {
+    const root = createKeyMappingNode({ key: '' });
+
+    addKeyMappings(
+      [{ key: 'A' }, { key: 'B' }, { key: 'C', action() {} }],
+      root
+    );
+    addKeyMappings(
+      [{ key: 'A' }, { key: 'B' }, { key: 'D', action() {} }],
+      root
+    );
+    addKeyMappings(
+      [{ key: 'A' }, { key: 'B' }, { key: 'E', action() {} }],
+      root
+    );
+
+    const keyMappingC = getKeyMappingNode(['A', 'B', 'C'], root);
+    const keyMappingD = getKeyMappingNode(['A', 'B', 'D'], root);
+    const keyMappingE = getKeyMappingNode(['A', 'B', 'E'], root);
+
+    assert.deepStrictEqual(keyMappingC?.mapping?.key, 'C');
+    assert.deepStrictEqual(typeof keyMappingC?.mapping?.action, 'function');
+    assert.deepStrictEqual(keyMappingD?.mapping?.key, 'D');
+    assert.deepStrictEqual(typeof keyMappingD?.mapping?.action, 'function');
+    assert.deepStrictEqual(keyMappingE?.mapping?.key, 'E');
+    assert.deepStrictEqual(typeof keyMappingE?.mapping?.action, 'function');
+  });
 });
