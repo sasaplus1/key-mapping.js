@@ -50,9 +50,11 @@
     "build": "microbundle build",
     "fix": "run-p -l fix:*",
     "fix:eslint": "eslint --fix .",
+    "fix:fixpack": "npx fixpack",
     "fix:prettier": "prettier --write .",
     "lint": "run-p -l lint:*",
     "lint:eslint": "eslint .",
+    "lint:fixpack": "npx fixpack --dryRun",
     "lint:prettier": "prettier --check .",
     "watch": "microbundle watch"
   },
