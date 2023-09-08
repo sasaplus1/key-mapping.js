@@ -58,6 +58,7 @@
     "lint:eslint": "eslint .",
     "lint:fixpack": "npx fixpack --dryRun",
     "lint:prettier": "prettier --check .",
+    "prebuild": "rimraf ./dist",
     "test": "node --loader tsx --test ./index.test.ts",
     "watch": "microbundle watch"
   },
