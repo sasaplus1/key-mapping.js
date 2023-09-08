@@ -5,9 +5,9 @@ store key mappings
 ## Usage
 
 ```ts
-import { createKeyMapping } from 'key-mapping';
+import { createKeyMappingNode } from 'key-mapping';
 
-const root = createKeyMapping({ key: '' });
+const root = createKeyMappingNode({ key: '' });
 
 root
   .add({ key: 'A' })
@@ -19,9 +19,9 @@ root.get('A')?.get('B')?.mapping?.action?.(); // => Hello!
 or
 
 ```ts
-import { createKeyMapping } from 'key-mapping';
+import { createKeyMappingNode, addKeyMappings, getKeyMappingNode } from 'key-mapping';
 
-const root = createKeyMapping({ key: '' });
+const root = createKeyMappingNode({ key: '' });
 
 const keyMappings = [
   { key: 'A' },
@@ -29,7 +29,7 @@ const keyMappings = [
 ];
 
 addKeyMappings(keyMappings, root);
-getKeyMapping(['A', 'B'], root)?.mapping?.action?.(); // => Hello!
+getKeyMappingNode(['A', 'B'], root)?.mapping?.action?.(); // => Hello!
 ```
 
 ## License
