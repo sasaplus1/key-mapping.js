@@ -1,3 +1,4 @@
+dist
 !.*.cjs
 !.*.js
 !.*.mjs
