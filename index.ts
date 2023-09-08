@@ -7,8 +7,8 @@ export type KeyMapping<T> = {
 export type KeyMappingNode<T> = {
   add: (nextKeyMapping: KeyMapping<T>) => KeyMappingNode<T>;
   get: (key: T) => KeyMappingNode<T> | undefined;
-  // TODO: remove: () => void;
   mapping: KeyMapping<T>;
+  remove: (key: T) => boolean;
 };
 
 /**
@@ -45,10 +45,15 @@ export function createKeyMappingNode<T>(
     return nextMapping.get(key);
   };
 
+  const remove: KeyMappingNode<T>['remove'] = (key) => {
+    return nextMapping.delete(key);
+  };
+
   return {
     add,
     get,
-    mapping
+    mapping,
+    remove
   };
 }
 
