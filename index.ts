@@ -7,7 +7,7 @@ export type KeyMappingNode<T> = {
   add: (nextKeyMapping: KeyMapping<T>) => KeyMappingNode<T>;
   get: (key: T) => KeyMappingNode<T> | undefined;
   mapping: KeyMapping<T>;
-}
+};
 
 /**
  * create key mapping node
@@ -26,11 +26,13 @@ export type KeyMappingNode<T> = {
  * root.get("A")?.get("B")?.mapping?.action?.(); // => Hello!
  * ```
  */
-export function createKeyMapping<T>(keyMapping: KeyMapping<T>): KeyMappingNode<T> {
+export function createKeyMapping<T>(
+  keyMapping: KeyMapping<T>
+): KeyMappingNode<T> {
   const mapping = keyMapping;
   const nextMapping = new Map<T, KeyMappingNode<T>>();
 
-  const add: KeyMappingNode<T>["add"] = (nextKeyMapping) => {
+  const add: KeyMappingNode<T>['add'] = (nextKeyMapping) => {
     const nextKeyMappingNode = createKeyMapping(nextKeyMapping);
 
     nextMapping.set(nextKeyMappingNode.mapping.key, nextKeyMappingNode);
@@ -38,14 +40,14 @@ export function createKeyMapping<T>(keyMapping: KeyMapping<T>): KeyMappingNode<T
     return nextKeyMappingNode;
   };
 
-  const get: KeyMappingNode<T>["get"] = (key) => {
+  const get: KeyMappingNode<T>['get'] = (key) => {
     return nextMapping.get(key);
   };
 
   return {
     add,
     get,
-    mapping,
+    mapping
   };
 }
 
@@ -64,7 +66,10 @@ export function createKeyMapping<T>(keyMapping: KeyMapping<T>): KeyMappingNode<T
  * getKeyMapping(["A", "B"], root)?.mapping?.action?.(); // => Hello!
  * ```
  */
-export function addKeyMappings<T>(keyMappings: KeyMapping<T>[], root: KeyMappingNode<T>): void {
+export function addKeyMappings<T>(
+  keyMappings: KeyMapping<T>[],
+  root: KeyMappingNode<T>
+): void {
   // TODO: !
   let keyMappingNode: KeyMappingNode<T> = root.add(keyMappings[0]!);
 
@@ -94,7 +99,10 @@ export function addKeyMappings<T>(keyMappings: KeyMapping<T>[], root: KeyMapping
  * getKeyMapping(["A", "B"], root)?.mapping?.action?.(); // => Hello!
  * ```
  */
-export function getKeyMapping<T>(keys: T[], root: KeyMappingNode<T>): KeyMappingNode<T> | undefined {
+export function getKeyMapping<T>(
+  keys: T[],
+  root: KeyMappingNode<T>
+): KeyMappingNode<T> | undefined {
   // TODO: !
   let keyMapping: KeyMappingNode<T> | undefined = root.get(keys[0]!);
 
