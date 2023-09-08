@@ -33,6 +33,8 @@ export function createKeyMappingNode<T>(
   const mapping = keyMapping;
   const nextMapping = new Map<T, KeyMappingNode<T>>();
 
+  /* TODO: prototype */
+
   const add: KeyMappingNode<T>['add'] = (nextKeyMapping) => {
     const nextKeyMappingNode = createKeyMappingNode(nextKeyMapping);
 
