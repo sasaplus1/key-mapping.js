@@ -9,9 +9,12 @@ import { createKeyMappingNode } from 'key-mapping';
 
 const root = createKeyMappingNode({ key: '' });
 
-root
-  .add({ key: 'A' })
-  .add({ key: 'B', action() { console.log('Hello!'); } });
+root.add({ key: 'A' }).add({
+  key: 'B',
+  action() {
+    console.log('Hello!');
+  }
+});
 
 root.get('A')?.get('B')?.mapping?.action?.(); // => Hello!
 ```
@@ -19,13 +22,22 @@ root.get('A')?.get('B')?.mapping?.action?.(); // => Hello!
 or
 
 ```ts
-import { createKeyMappingNode, addKeyMappings, getKeyMappingNode } from 'key-mapping';
+import {
+  createKeyMappingNode,
+  addKeyMappings,
+  getKeyMappingNode
+} from 'key-mapping';
 
 const root = createKeyMappingNode({ key: '' });
 
 const keyMappings = [
   { key: 'A' },
-  { key: 'B', action() { console.log('Hello!'); } }
+  {
+    key: 'B',
+    action() {
+      console.log('Hello!');
+    }
+  }
 ];
 
 addKeyMappings(keyMappings, root);
