@@ -6,6 +6,7 @@ export type KeyMapping<T> = {
 export type KeyMappingNode<T> = {
   add: (nextKeyMapping: KeyMapping<T>) => KeyMappingNode<T>;
   get: (key: T) => KeyMappingNode<T> | undefined;
+  // TODO: remove
   mapping: KeyMapping<T>;
 };
 
@@ -15,7 +16,6 @@ export type KeyMappingNode<T> = {
  * @param keyMapping - key mapping
  * @returns key mapping node
  * @example
- *
  * ```ts
  * const root = createKeyMapping({ key: "" });
  *
