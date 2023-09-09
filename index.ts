@@ -4,12 +4,47 @@ export type KeyMapping<T> = {
   action?: (...args: any[]) => any;
 };
 
-export type KeyMappingNode<T> = {
-  add: (nextKeyMapping: KeyMapping<T>) => KeyMappingNode<T>;
-  get: (key: T) => KeyMappingNode<T> | undefined;
-  mapping: KeyMapping<T>;
-  remove: (key: T) => boolean;
-};
+export class KeyMappingNode<T> {
+  private nextMapping: Map<T, KeyMappingNode<T>>;
+
+  constructor(public mapping: KeyMapping<T>) {
+    this.nextMapping = new Map();
+  }
+
+  /**
+   * add key mapping node
+   *
+   * @param nextKeyMapping - next key mapping
+   * @returns next key mapping node
+   */
+  add(nextKeyMapping: KeyMapping<T>): KeyMappingNode<T> {
+    const nextKeyMappingNode = new KeyMappingNode(nextKeyMapping);
+
+    this.nextMapping.set(nextKeyMappingNode.mapping.key, nextKeyMappingNode);
+
+    return nextKeyMappingNode;
+  }
+
+  /**
+   * get key mapping node
+   *
+   * @param key - key
+   * @returns key mapping node if exist, otherwise undefined
+   */
+  get(key: T): KeyMappingNode<T> | undefined {
+    return this.nextMapping.get(key);
+  }
+
+  /**
+   * remove key mapping node
+   *
+   * @param key - key
+   * @returns true if key mapping node exist, otherwise false
+   */
+  remove(key: T): boolean {
+    return this.nextMapping.delete(key);
+  }
+}
 
 /**
  * create key mapping node
@@ -30,33 +65,7 @@ export type KeyMappingNode<T> = {
 export function createKeyMappingNode<T>(
   keyMapping: KeyMapping<T>
 ): KeyMappingNode<T> {
-  const mapping = keyMapping;
-  const nextMapping = new Map<T, KeyMappingNode<T>>();
-
-  /* TODO: prototype */
-
-  const add: KeyMappingNode<T>['add'] = (nextKeyMapping) => {
-    const nextKeyMappingNode = createKeyMappingNode(nextKeyMapping);
-
-    nextMapping.set(nextKeyMappingNode.mapping.key, nextKeyMappingNode);
-
-    return nextKeyMappingNode;
-  };
-
-  const get: KeyMappingNode<T>['get'] = (key) => {
-    return nextMapping.get(key);
-  };
-
-  const remove: KeyMappingNode<T>['remove'] = (key) => {
-    return nextMapping.delete(key);
-  };
-
-  return {
-    add,
-    get,
-    mapping,
-    remove
-  };
+  return new KeyMappingNode(keyMapping);
 }
 
 /**
