@@ -96,13 +96,7 @@ export function addKeyMappings<T>(
 
   let keyMappingNode: KeyMappingNode<T> | undefined = undefined;
 
-  for (let i = 0, len = keyMappings.length; i < len; i += 1) {
-    const keyMapping = keyMappings[i];
-
-    if (!keyMapping) {
-      return;
-    }
-
+  for (const keyMapping of keyMappings) {
     keyMappingNode = keyMappingNode
       ? get(keyMapping, keyMappingNode)
       : get(keyMapping);
@@ -136,13 +130,7 @@ export function getKeyMappingNode<T>(
 
   let keyMappingNode: KeyMappingNode<T> | undefined = undefined;
 
-  for (let i = 0, len = keys.length; i < len; i += 1) {
-    const key = keys[i];
-
-    if (!key) {
-      break;
-    }
-
+  for (const key of keys) {
     keyMappingNode = keyMappingNode ? get(key, keyMappingNode) : get(key);
   }
 
