@@ -33,7 +33,7 @@
   "license": "MIT",
   "main": "./dist/index.js",
   "module": "./dist/index.module.mjs",
-  "packageManager": "npm@10.2.5",
+  "packageManager": "npm@10.3.0",
   "prettier": {
     "singleQuote": true,
     "trailingComma": "none"
